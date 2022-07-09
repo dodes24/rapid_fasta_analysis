@@ -4,7 +4,7 @@
 This program takes a FASTA file and returns various analysis of the sequences.
 """
 
-''' modules I going to use
+''' modules I am going to use
 import sys
 import urllib
 import contextlib
