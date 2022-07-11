@@ -171,7 +171,7 @@ def dictionary_for_fasta():
     loci_list = freeze(orf_finder())
     nucleotide_list = list_seq_nucleotides()
     protein_list = genes_to_protein()
-    #loci_list = orf_finder()d
+    #loci_list = orf_finder()
     dictionary = dict(zip(loci_list, protein_list))
     return dictionary
     pass
