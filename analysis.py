@@ -4,19 +4,7 @@
 This program takes a FASTA file and returns various analysis of the sequences.
 """
 
-
-import sys
-import urllib
-import contextlib
-from Bio import SeqIO
-from Bio.SeqUtils.ProtParam import ProteinAnalysis
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.SeqUtils import GC
 from Bio.Seq import transcribe
@@ -90,7 +78,7 @@ def orf_finder():
     return orfs
 
 
-print(orf_finder())
+print(orf_finder()[-1])
 
 
 def orf_nucleotides():
@@ -152,30 +140,37 @@ def genes_to_protein():
     return proteins
 
 
-#print(genes_to_protein())
+#print(genes_to_protein()[-1])
 
 
-def freeze_iterate(d):
-    for i in orf_finder():
-        for key, value in i.items():
-            yield key, value
-    return d
-
-print(freeze_iterate(orf_finder()))
+def gc_all_sequences():
+    all_gc_cont = []
+    for gc in orf_nucleotides():
+        all_gc_cont.append(str(round(GC(gc), 2)))
+    return all_gc_cont
 
 
-def dictionary_for_fasta():
-    '''
-    This function creates a dictionary of the ORFs info and their proteins.
-    '''
-    loci_list = freeze(orf_finder())
-    nucleotide_list = list_seq_nucleotides()
-    protein_list = genes_to_protein()
-    #loci_list = orf_finder()
-    dictionary = dict(zip(loci_list, protein_list))
-    return dictionary
-    pass
-#print(dictionary_for_fasta())
+def create_fasta_protein(d=orf_finder(), e=genes_to_protein(), f=gc_all_sequences()):
+    """
+    This file creates a FASTA file of protein sequences with header info abut nucleotide sequence
+    from which the protein was translated. (start, stop, frame, sense, lenght, GC conent...)
+    """
+
+    e_list_str = list(map(str, e))
+    d_list_str = list(map(str, d))
+
+    with open("proteins.fasta", 'w') as fp:
+        for j in range(len(e_list_str)):
+            print("> |NUCLEOTIDE SEQ INFO| GC content: " + f[j] + " %|" + d_list_str[j] + "\n" + e_list_str[j], file=fp)
+
+    return
+
+#create_fasta_protein() #later on in the program.
+
+
+
+
+
 
 
 
