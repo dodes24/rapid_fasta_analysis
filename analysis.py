@@ -51,7 +51,7 @@ def gc_content(input_file):
 
 print(gc_content(fasta_file))
 
-
+'''
 def transcribe_to_mrna():
     """
     This function transcribes the DNA sequence to mRNA.
@@ -61,7 +61,7 @@ def transcribe_to_mrna():
     for record in sequences:
         mrna = transcribe(str(record.seq))
         return mrna
-
+'''
 
 # print(transcribe_to_mrna(fasta_file))
 
@@ -91,16 +91,8 @@ def orf_nucleotides():
     return orf_nucleotide_seq
 
 
-'''
-    for x in orf_nucleotides:
-        if (len(str(x))) % 3 != 0:
-           printed = print(len(x))
-        #printed = print(len(str((x))))
-    return printed
-'''
+print(orf_nucleotides())
 
-
-# print(orf_nucleotides()[0])
 
 def list_seq_nucleotides():
     """
@@ -148,10 +140,15 @@ def genes_to_protein():
     return proteins
 
 
+
 # print(genes_to_protein()[-1])
 
 
 def gc_all_sequences():
+    """
+    This function returns the GC content of all sequences.
+    :return:
+    """
     all_gc_cont = []
     for gc in orf_nucleotides():
         all_gc_cont.append(str(round(GC(gc), 2)))
@@ -164,12 +161,12 @@ def create_fasta_protein(d=orf_finder(), e=None, f=None):
     from which the protein was translated. (start, stop, frame, sense, length, GC content...)
     """
 
-    if f is None:
-        f = gc_all_sequences()
+    if f is None:   # if no file name is provided, create a default name
+        f = gc_all_sequences()  # create a list of GC content for each ORF
     if e is None:
-        e = genes_to_protein()
-    e_list_str = list(map(str, e))
-    d_list_str = list(map(str, d))
+        e = genes_to_protein()  # create a list of protein sequences
+    e_list_str = list(map(str, e))  # convert list of Seq objects to list of strings
+    d_list_str = list(map(str, d))  # convert list of Seq objects to list of strings
 
     prot_number_list = np.arange(1, len(e_list_str) + 1)
 
@@ -182,6 +179,44 @@ def create_fasta_protein(d=orf_finder(), e=None, f=None):
 
 
 create_fasta_protein()  # later on in the program
+
+
+def transcription_orf():
+    """
+    This function transcribes the ORFs to mRNA.
+    :return:
+    """
+    mrna = []
+    for orf in orf_nucleotides():
+        mrna.append(transcribe(str(orf)))
+    return mrna
+
+# print(transcription_orf())
+
+def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
+    """
+    This file creates a FASTA file of mRNA sequences of found genes with header info abut nucleotide sequence.
+    (start, stop, frame, sense, length, GC content...)
+    """
+
+    if f is None:
+        f = gc_all_sequences()
+    if e is None:
+        e = transcription_orf()
+    e_list_str = list(map(str, e))
+    d_list_str = list(map(str, d))
+
+    gene_number_list = np.arange(1, len(e_list_str) + 1)
+
+    with open("mrna_sequences.fasta", 'w') as fp:
+        for j in range(len(e_list_str)):
+            print("> GENE NO." + str(gene_number_list[j]) + " |NUC SEQ INFO| GC content: " +
+                  f[j] + " %|" + d_list_str[j] + "\n" + e_list_str[j], file=fp)
+
+    return
+
+
+create_fasta_nucleotide_mrna()
 
 
 def reverse_complement():
