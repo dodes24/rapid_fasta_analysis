@@ -10,6 +10,8 @@ from Bio.SeqUtils import GC
 from Bio.Seq import transcribe
 from orffinder import orffinder
 import numpy as np
+from matplotlib import pyplot as plt
+from collections import Counter
 
 # fasta_file = input("Enter the name of the FASTA file: ")  # input file using terminal
 fasta_file = "tuberculosis_genomic.fna"
@@ -157,7 +159,7 @@ def gc_all_sequences():
 
 def create_fasta_protein(d=orf_finder(), e=None, f=None):
     """
-    This file creates a FASTA file of protein sequences with header info abut nucleotide sequence
+    This function creates a FASTA file of protein sequences with header info abut nucleotide sequence
     from which the protein was translated. (start, stop, frame, sense, length, GC content...)
     """
 
@@ -195,7 +197,7 @@ def transcription_orf():
 
 def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
     """
-    This file creates a FASTA file of mRNA sequences of found genes with header info abut nucleotide sequence.
+    This function creates a FASTA file of mRNA sequences of found genes with header info abut nucleotide sequence.
     (start, stop, frame, sense, length, GC content...)
     """
 
@@ -219,7 +221,7 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
 create_fasta_nucleotide_mrna()
 
 
-def reverse_complement():
+def reverse_complement(): #  this function is not used in the program
     """
     This function returns the reverse complement of the nucleotide sequence.
     """
@@ -227,6 +229,78 @@ def reverse_complement():
     return rev
 
 
-print(type(orf_finder()))
+#  print(type(orf_finder()))
 
-# print(reverse_complement())
+#  print(reverse_complement())
+
+def plot_nucleotide_frequency_histogram():
+    """
+    This function plots the nucleotide frequency of the genome.
+    """
+    nuc_freq = {}
+    for nuc in get_sequence():  # get the nucleotide sequence
+        if nuc not in nuc_freq:  # if the nucleotide is not in the dictionary, add it
+            nuc_freq[nuc] = 1  # add the nucleotide to the dictionary with a value of 1
+        else:
+            nuc_freq[nuc] += 1  # if the nucleotide is already in the dictionary, add 1 to its value
+    nuc_freq_list = list(nuc_freq.values())  # convert the dictionary to a list
+    nuc_freq_keys = list(nuc_freq.keys())  # convert the dictionary to a list
+    plt.bar(nuc_freq_keys, nuc_freq_list)  # plot the list of values against the list of keys
+    plt.title("Nucleotide Frequency")  # set the title
+    plt.xlabel("Nucleotide")  # set the x-axis label
+    plt.ylabel("Frequency")  # set the y-axis label
+    plt.tight_layout()  # set the layout of the plot
+    plt.show()  # show the plot
+    return
+
+
+plot_nucleotide_frequency_histogram()
+
+
+def plot_nucleotide_frequency_pie():
+    """
+    This function plots the nucleotide frequency of the genome.
+    """
+    nuc_freq = {}
+    for nuc in get_sequence():
+        if nuc not in nuc_freq:
+            nuc_freq[nuc] = 1
+        else:
+            nuc_freq[nuc] += 1
+    nuc_freq_list = list(nuc_freq.values())
+    nuc_freq_keys = list(nuc_freq.keys())
+    plt.pie(nuc_freq_list, labels=nuc_freq_keys, autopct='%1.1f%%')
+    plt.title("Nucleotide Frequency")
+    plt.show()
+    return
+
+
+plot_nucleotide_frequency_pie()
+
+
+def overall_sequence_info():
+    """
+    This function returns the overall sequence information of the genome.
+    """
+    nuc_freq = {}
+    for nuc in get_sequence():
+        if nuc not in nuc_freq:
+            nuc_freq[nuc] = 1
+        else:
+            nuc_freq[nuc] += 1
+    nuc_freq_list = list(nuc_freq.values())
+    nuc_freq_keys = list(nuc_freq.keys())
+    nuc_freq_sum = sum(nuc_freq_list)
+    nuc_freq_percent = list(map(lambda x: round(x / nuc_freq_sum * 100, 2), nuc_freq_list))
+    nuc_freq_percent_keys = list(map(lambda x: str(x) + "% ", nuc_freq_percent))
+    final_list_freq = str([item for sublist in zip(nuc_freq_keys, nuc_freq_percent_keys) for item in sublist])
+    nuc_freq_percent_keys_str = ''.join(final_list_freq)
+    print(f"Sequence length: {nuc_freq_sum} bp")
+    print(f"Nucleotide Percentage: {nuc_freq_percent_keys_str}")
+    print(f"GC Content: {round((nuc_freq_list[1] + nuc_freq_list[3]) / nuc_freq_sum * 100, 2)}%")
+    print(f"AT Content: {round((nuc_freq_list[2] + nuc_freq_list[0]) / nuc_freq_sum * 100, 2)}%")
+    return
+
+
+print(overall_sequence_info())
+
