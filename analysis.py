@@ -1,7 +1,10 @@
 #!/bin/python
 # -*- coding: utf-8 -*-
 """
-This program takes a FASTA file and returns various analysis of the sequences.
+This program is used to analyze the genomic sequence of a bacterial genome.
+Bacteria is a prokaryotic organism and therefore it does not have introns.
+This program takes a FASTA file and returns various analysis of the sequence.
+
 """
 # from Bio.Restriction import RestrictionBatch, Analysis
 from Bio.Seq import Seq
@@ -36,7 +39,9 @@ def parse_fasta(input_file):
     # now works fine with one sequence in the file. Input file will be genomic sequence.
 
 
-# print(parse_fasta(fasta_file))
+def get_sequence():
+    sequence_to_orf = SeqIO.read(fasta_file, "fasta")
+    return sequence_to_orf
 
 
 def gc_content(input_file):
@@ -51,27 +56,6 @@ def gc_content(input_file):
         return gc_cont_percent
 
 
-print(gc_content(fasta_file))
-
-'''
-def transcribe_to_mrna():
-    """
-    This function transcribes the DNA sequence to mRNA.
-    :return: mrna
-    """
-    seq_id, sequences, lengths = parse_fasta(fasta_file)
-    for record in sequences:
-        mrna = transcribe(str(record.seq))
-        return mrna
-'''
-
-# print(transcribe_to_mrna(fasta_file))
-
-def get_sequence():
-    sequence_to_orf = SeqIO.read(fasta_file, "fasta")
-    return sequence_to_orf
-
-
 def orf_finder():
     """
     This function finds the ORFs in the mRNA sequence.
@@ -82,18 +66,12 @@ def orf_finder():
     return open_reading_frames
 
 
-print(orf_finder()[-1])
-
-
 def orf_nucleotides():
     """
     This function returns the nucleotide sequence of the ORFs.
     """
     orf_nucleotide_seq = orffinder.getORFNucleotides(get_sequence(), return_loci=False)
     return orf_nucleotide_seq
-
-
-print(orf_nucleotides())
 
 
 def list_seq_nucleotides():
@@ -104,9 +82,6 @@ def list_seq_nucleotides():
     for orf in orf_nucleotides():
         seq_nucleotides.append(str(orf))
     return seq_nucleotides
-
-
-# print(list_seq_nucleotides())
 
 
 def translate_sequence(input_seq):
@@ -142,10 +117,6 @@ def genes_to_protein():
     return proteins
 
 
-
-# print(genes_to_protein()[-1])
-
-
 def gc_all_sequences():
     """
     This function returns the GC content of all sequences.
@@ -163,7 +134,7 @@ def create_fasta_protein(d=orf_finder(), e=None, f=None):
     from which the protein was translated. (start, stop, frame, sense, length, GC content...)
     """
 
-    if f is None:   # if no file name is provided, create a default name
+    if f is None:  # if no file name is provided, create a default name
         f = gc_all_sequences()  # create a list of GC content for each ORF
     if e is None:
         e = genes_to_protein()  # create a list of protein sequences
@@ -193,7 +164,9 @@ def transcription_orf():
         mrna.append(transcribe(str(orf)))
     return mrna
 
+
 # print(transcription_orf())
+
 
 def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
     """
@@ -221,18 +194,6 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
 create_fasta_nucleotide_mrna()
 
 
-def reverse_complement(): #  this function is not used in the program
-    """
-    This function returns the reverse complement of the nucleotide sequence.
-    """
-    rev = get_sequence().reverse_complement()
-    return rev
-
-
-#  print(type(orf_finder()))
-
-#  print(reverse_complement())
-
 def plot_nucleotide_frequency_histogram():
     """
     This function plots the nucleotide frequency of the genome.
@@ -246,11 +207,13 @@ def plot_nucleotide_frequency_histogram():
     nuc_freq_list = list(nuc_freq.values())  # convert the dictionary to a list
     nuc_freq_keys = list(nuc_freq.keys())  # convert the dictionary to a list
     plt.bar(nuc_freq_keys, nuc_freq_list)  # plot the list of values against the list of keys
-    plt.title("Nucleotide Frequency")  # set the title
-    plt.xlabel("Nucleotide")  # set the x-axis label
-    plt.ylabel("Frequency")  # set the y-axis label
+    plt.title("Nucleotide Frequency", fontsize=14)  # set the title
+    plt.xlabel("Nucleotide", fontsize=14)  # set the x-axis label
+    plt.ylabel("Frequency", fontsize=14)  # set the y-axis label
     plt.tight_layout()  # set the layout of the plot
+    plt.savefig("plot_nucleotide_frequency_histogram.jpg", dpi=250)  # save the plot as a .jpg file
     plt.show()  # show the plot
+
     return
 
 
@@ -269,8 +232,10 @@ def plot_nucleotide_frequency_pie():
             nuc_freq[nuc] += 1
     nuc_freq_list = list(nuc_freq.values())
     nuc_freq_keys = list(nuc_freq.keys())
+    plt.figure(figsize=(10, 6))
     plt.pie(nuc_freq_list, labels=nuc_freq_keys, autopct='%1.1f%%')
-    plt.title("Nucleotide Frequency")
+    plt.title("Nucleotide Frequency", fontsize=14)
+    plt.savefig("plot_nucleotide_frequency_pie.jpg", dpi=250)
     plt.show()
     return
 
@@ -304,3 +269,55 @@ def overall_sequence_info():
 
 print(overall_sequence_info())
 
+
+def dna_to_protein():
+    """
+    This function translates the DNA sequence to protein.
+    """
+    protein = get_sequence().translate()
+    return protein
+
+
+def protein_frequency():
+    """
+    This function returns the frequency of each amino acid in the protein sequence.
+    :return:
+    """
+    prt_freq = Counter(dna_to_protein())
+    return prt_freq
+
+
+def protein_frequency_histogram():
+    """
+    This function plots the protein frequency of the genome.
+    """
+    freq = protein_frequency()
+    plt.figure(figsize=(10, 6))
+    plt.bar(freq.keys(), freq.values())
+    plt.title("Amino acid Frquency Distribution", fontsize=14)
+    plt.xlabel("Amino acid", fontsize=14)
+    plt.ylabel("Frequency", fontsize=14)
+    plt.tight_layout()
+    plt.savefig("protein_frequency.jpg", dpi=250)
+    plt.show()
+
+
+protein_frequency_histogram()
+
+
+def protein_frequency_pie():
+    """
+    This function plots the protein frequency of the genome.
+    """
+    freq = protein_frequency()
+    plt.figure(figsize=(8, 6))
+    plt.pie(freq.values(), labels=freq.keys(), autopct='%1.1f%%')
+    plt.title("Amino acid Frequency", fontsize=14)
+    plt.savefig("protein_frequency_pie.jpg", dpi=250)
+    plt.show()
+
+
+protein_frequency_pie()
+
+
+# Todo: add stat output in right format, find more stats to add about hypothetic proteins I found, graphs, etc.
