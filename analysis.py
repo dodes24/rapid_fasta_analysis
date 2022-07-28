@@ -6,7 +6,7 @@ Bacteria is a prokaryotic organism and therefore it does not have introns.
 This program takes a FASTA file and returns various analysis of the sequence.
 
 """
-# from Bio.Restriction import RestrictionBatch, Analysis
+from Bio.SeqUtils.ProtParam import ProteinAnalysis as Pa
 from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqUtils import GC
@@ -15,6 +15,7 @@ from orffinder import orffinder
 import numpy as np
 from matplotlib import pyplot as plt
 from collections import Counter
+import textwrap
 
 # fasta_file = input("Enter the name of the FASTA file: ")  # input file using terminal
 fasta_file = "tuberculosis_genomic.fna"
@@ -128,26 +129,72 @@ def gc_all_sequences():
     return all_gc_cont
 
 
-def create_fasta_protein(d=orf_finder(), e=None, f=None):
+def isoelectric_point():  # prot analaysis
+    """
+    This function returns the charge at pH 7.
+    """
+    iso_op_list = []
+    for protein in genes_to_protein():
+        protein_str = Pa(str(protein))
+        iso_op_list.append(round(protein_str.isoelectric_point(), 2))
+    return iso_op_list
+
+
+def molecular_weight():
+    """
+    This function returns the molecular weight of the protein sequences.
+    :return:
+    """
+    molecular_weight_l = []
+    for protein in genes_to_protein():
+        protein_str = Pa(str(protein))
+        molecular_weight_l.append(round(protein_str.molecular_weight(), 2))
+    return molecular_weight_l
+
+
+def instability_index():
+    """
+    Thi function returns the instability index of the protein sequence.
+    If the index is < 40, the protein is stable.
+    """
+    instability_index_list = []
+    for protein in genes_to_protein():
+        protein_str = Pa(str(protein))
+        instability_index_list.append(round(protein_str.instability_index(), 2))
+    return instability_index_list
+
+
+def create_fasta_protein(e=None, f=None, g=None, h=None):
     """
     This function creates a FASTA file of protein sequences with header info abut nucleotide sequence
     from which the protein was translated. (start, stop, frame, sense, length, GC content...)
     """
+    wrapper = textwrap.TextWrapper(width=80)
 
     if f is None:  # if no file name is provided, create a default name
-        f = gc_all_sequences()  # create a list of GC content for each ORF
+        f = isoelectric_point()  # create a list of GC content for each ORF
     if e is None:
         e = genes_to_protein()  # create a list of protein sequences
+    if g is None:
+        g = molecular_weight()  # create a list of molecular weights for each protein
+    if h is None:
+        h = instability_index()
+
     e_list_str = list(map(str, e))  # convert list of Seq objects to list of strings
-    d_list_str = list(map(str, d))  # convert list of Seq objects to list of strings
+    f_list_str = list(map(str, f))  # convert list of float objects to list of strings
+    g_list_str = list(map(str, g))  # convert list of float objects to list of strings
+    h_list_str = list(map(str, h))  # convert list of float objects to list of strings
 
     prot_number_list = np.arange(1, len(e_list_str) + 1)
 
+    wrapper = textwrap.TextWrapper(width=80)
+
     with open("proteins.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
-            print("> PROTEIN NO." + str(prot_number_list[j]) + " |NUCLEOTIDE SEQ INFO| GC content: " +
-                  f[j] + " %|" + d_list_str[j] + "\n" + e_list_str[j], file=fp)
-
+            string = wrapper.fill(text=e_list_str[j])
+            print("> PROTEIN NO." + str(prot_number_list[j]) + " |PROT SEQ INFO: IEP = " +
+                  f_list_str[j] + ", MW = " + g_list_str[j] + ", Instability idx = " + h_list_str[j] +
+                  "\n" + string + "\n", file=fp)
     return
 
 
@@ -183,10 +230,13 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
 
     gene_number_list = np.arange(1, len(e_list_str) + 1)
 
+    wrapper = textwrap.TextWrapper(width=80)
+
     with open("mrna_sequences.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
+            string = wrapper.fill(text=e_list_str[j])
             print("> GENE NO." + str(gene_number_list[j]) + " |NUC SEQ INFO| GC content: " +
-                  f[j] + " %|" + d_list_str[j] + "\n" + e_list_str[j], file=fp)
+                  f[j] + " %|" + d_list_str[j] + "\n" + string + "\n", file=fp)
 
     return
 
@@ -319,5 +369,4 @@ def protein_frequency_pie():
 
 protein_frequency_pie()
 
-
-# Todo: add stat output in right format, find more stats to add about hypothetic proteins I found, graphs, etc.
+# Todo:find more stats to add about hypothetic proteins I found, graphs, etc.
