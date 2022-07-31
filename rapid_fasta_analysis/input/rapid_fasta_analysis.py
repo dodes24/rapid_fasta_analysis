@@ -1,6 +1,10 @@
 #!/bin/python
 # -*- coding: utf-8 -*-
 """
+Title: rapid_fasta_analysis
+Date: 2022-31-07
+Author: Jozef Fülöp
+
 This program is used to analyze the genomic sequence of a bacterial genome.
 Bacteria is a prokaryotic organism, and therefore it does not have introns.
 This program takes a FASTA file and returns various analysis of the sequence.

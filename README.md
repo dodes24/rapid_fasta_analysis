@@ -32,9 +32,9 @@ Stats:
 * `python rapid_fasta_analysis.py`
 * to start the program.
 * Enter the name/path of the file to be analyzed.: It is better to have fasta file and program in the same directory.
-  * ![img.png](SARS-CoV-2/data/img.png)
+  * ![img.png](rapid_fasta_analysis/data/img.png)
 * Sequence averall info will be displayed.
-  * ![img_1.png](SARS-CoV-2/data/img_1.png)
+  * ![img_1.png](rapid_fasta_analysis/data/img_1.png)
 * Output files will be created.: The output files will be named proteins.fasta and mrna_sequences.fasta. 4 jpg files
   will be created.
 
