@@ -7,6 +7,9 @@ Bacteria is a prokaryotic organism, and therefore it does not have introns.
 This program takes a FASTA file and returns various analysis of the sequence.
 Output: two fasta files, one with mRNA sequences and some stats about the nucleotide sequence. The other with the
 protein sequences and some stats abut the protein sequence.
+* Output from this program are two fasta files: mRNA gene sequences and hypothetical protein sequences. Four
+jpg pictures with charts about the sequence and also output in terminal some stats about the sequence.
+
 
 ## Main features
 * This program can find hypothetical genes and proteins in a genome sequence. 
@@ -33,9 +36,9 @@ Stats:
 * `python rapid_fasta_analysis.py`
 * to start the program.
 * Enter the name/path of the file to be analyzed.: It is better to have fasta file and program in the same directory.
-  * ![img.png](rapid_fasta_analysis/data/img.png)
+  * ![img.png](data/img.png)
 * Sequence overall info will be displayed.
-  * ![img_1.png](rapid_fasta_analysis/data/img_1.png)
+  * ![img_1.png](data/img_1.png)
 * Output files will be created.: The output files will be named proteins.fasta and mrna_sequences.fasta. 4 jpg files
   will be created.
 
