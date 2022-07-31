@@ -1,46 +1,41 @@
-# Rapid_Fasta_Analysis
+# NCBI Datasets
 
-A tool created for the UCT course.
+https://www.ncbi.nlm.nih.gov/datasets
 
-* This program is used to analyze the genomic sequence of a bacterial genome.
-Bacteria is a prokaryotic organism, and therefore it does not have introns.
-This program takes a FASTA file and returns various analysis of the sequence.
-Output: two fasta files, one with mRNA sequences and some stats about the nucleotide sequence. The other with the
-protein sequences and some stats abut the protein sequence.
+This zip archive contains an NCBI Datasets Data Package.
 
-## Main features
-* This program can find hypothetical genes and proteins in a genome sequence. 
-* Process a fasta file. It can be a single sequence or a multiple sequence file. 
-* Obtain description and a sequence.
-* Return subsequence of a sequence: hypothetical genes and proteins.
-* Counting nucleotides in a sequence.
-* Computing the GC content of a sequence.
-* Computing the melting temperature of a sequence.
-* Complementing a strand of DNA.
-* DNA to RNA conversion.
-* RNA to DNA conversion.
+NCBI Datasets Data Packages can include sequence, annotation and other data files, and metadata in one or more data report files.
+Data report files are in JSON Lines format.
 
-Stats:
-* nucleotide seq: GC content, ORFs, start-end, frame, sense, length, trailing 
-* protein seq: isoelectric point, molecular weight, instability index, secondary structure
-    secondary structures: helix, strand, coil = number predicts probability of being a helix, strand, or coil
+---
+## FAQs
+### Where is the data I requested?
 
+Your data is in the subdirectory `ncbi_dataset/data/` contained within this zip archive.
 
-## Usage
-* Install required packages using the command:
-* `pip install -r requirements.txt`
-* next, in directory input is located program rapid_fasta_analysis.py
-* `python rapid_fasta_analysis.py`
-* to start the program.
-* Enter the name/path of the file to be analyzed.: It is better to have fasta file and program in the same directory.
-  * ![img.png](rapid_fasta_analysis/data/img.png)
-* Sequence averall info will be displayed.
-  * ![img_1.png](rapid_fasta_analysis/data/img_1.png)
-* Output files will be created.: The output files will be named proteins.fasta and mrna_sequences.fasta. 4 jpg files
-  will be created.
+### I still can't find my data, can you help?
 
-For example the file tuberculosis_genomic.fna was used. It is just cca 82000 bp long.
-Time consumption is about 10 seconds for this file.
-For fasta file with lenght of about 1055550 bp it takes about 30 minutes to complete the analysis.
-GCF_000008725.1_ASM872v1_genomic.fna is a file with about 1.05 Mbp long and it is a genome of Chlamydia trachomatis.
+We have identified a bug affecting Mac Safari users. When downloading data from the NCBI Datasets web interface, you may see only this README file after the download has completed (while other files appear to be missing).
+As a workaround to prevent this issue from recurring, we recommend disabling automatic zip archive extraction in Safari until Apple releases a bug fix.
+For more information, visit:
+https://www.ncbi.nlm.nih.gov/datasets/docs/reference-docs/mac-zip-bug/
 
+### How do I work with JSON Lines data reports?
+
+Visit our JSON Lines data report documentation page:
+https://www.ncbi.nlm.nih.gov/datasets/docs/how-tos/data-reports/working-with-jsonl-data-reports/
+
+### What is NCBI Datasets?
+
+NCBI Datasets is a new resource that lets you easily gather data from across NCBI databases. Find and download gene, transcript, protein and genome sequences, annotation and metadata.
+
+### Where can I find NCBI Datasets documentation?
+
+Visit the NCBI Datasets documentaion pages:
+https://www.ncbi.nlm.nih.gov/datasets/docs/
+
+---
+
+National Center for Biotechnology Information
+National Library of Medicine
+info@ncbi.nlm.nih.gov
