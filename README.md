@@ -41,6 +41,6 @@ Stats:
 
 For example the file tuberculosis_genomic.fna was used. It is just cca 82000 bp long.
 Time consumption is about 10 seconds for this file.
-For fasta file with lenght of about 1055550 bp it takes about 30 minutes to complete the analysis.
-GCF_000008725.1_ASM872v1_genomic.fna is a file with about 1.05 Mbp long and it is a genome of Chlamydia trachomatis.
+For fasta file with length of about 1055550 bp it takes about 30 minutes to complete the analysis.
+GCF_000008725.1_ASM872v1_genomic.fna is a file with about 1.05 Mbp long, and it is a genome of Chlamydia trachomatis.
 
