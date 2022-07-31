@@ -219,7 +219,7 @@ def create_fasta_protein(e=None, f=None, g=None, h=None, i=None):
 
     wrapper = textwrap.TextWrapper(width=80)
 
-    with open("output/proteins.fasta", 'w') as fp:
+    with open("proteins.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
             string = wrapper.fill(text=e_list_str[j])
             print("> PROTEIN NO." + str(prot_number_list[j]) + " |PROT SEQ INFO: IEP = " +
@@ -257,7 +257,7 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
 
     wrapper = textwrap.TextWrapper(width=80)
 
-    with open("output/mrna_sequences.fasta", 'w') as fp:
+    with open("mrna_sequences.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
             string = wrapper.fill(text=e_list_str[j])
             print("> GENE NO." + str(gene_number_list[j]) + " |NUC SEQ INFO| GC content: " +
