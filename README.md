@@ -20,21 +20,21 @@ protein sequences and some stats abut the protein sequence.
 * RNA to DNA conversion.
 
 Stats:
-* nusleotide seq: GC content, ORFs, start-end, frame, sense, length, trailing 
+* nucleotide seq: GC content, ORFs, start-end, frame, sense, length, trailing 
 * protein seq: isoelectric point, molecular weight, instability index, secondary structure
-    secondary structure: helix, strand, coil = number predicts probability of being a helix, strand, or coil
+    secondary structures: helix, strand, coil = number predicts probability of being a helix, strand, or coil
 
 
 ## Usage
 * Install required packages using the command:
 * `pip install -r requirements.txt`
 * next
-* `python3 rapid_fasta_analysis.py`
+* `python rapid_fasta_analysis.py`
 * to start the program.
 * Enter the name/path of the file to be analyzed.: It is better to have fasta file and program in the same directory.
-  * ![img.png](img.png)
+  * ![img.png](SARS-CoV-2/data/img.png)
 * Sequence averall info will be displayed.
-  * ![img_1.png](img_1.png)
+  * ![img_1.png](SARS-CoV-2/data/img_1.png)
 * Output files will be created.: The output files will be named proteins.fasta and mrna_sequences.fasta. 4 jpg files
   will be created.
 

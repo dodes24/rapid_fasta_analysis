@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 """
 This program is used to analyze the genomic sequence of a bacterial genome.
-Bacteria is a prokaryotic organism and therefore it does not have introns.
+Bacteria is a prokaryotic organism, and therefore it does not have introns.
 This program takes a FASTA file and returns various analysis of the sequence.
 Output: two fasta files, one with mRNA sequences and some stats about the nucleotide sequence. The other with the
 protein sequences and some stats abut the protein sequence.
 Stats:
-    nusleotide seq: GC content, ORFs, start-end, frame, sense, length, trailing
+    nucleotide seq: GC content, ORFs, start-end, frame, sense, length, trailing
     protein seq: isoelectric point, molecular weight, instability index, secondary structure
-    secondary structure: helix, strand, coil = number predicts probability of being a helix, strand, or coil
+    secondary structures: helix, strand, coil = number predicts probability of being a helix, strand, or coil
 """
 
 from Bio.SeqUtils.ProtParam import ProteinAnalysis as Pa
@@ -135,7 +135,7 @@ def gc_all_sequences():
     return all_gc_cont
 
 
-def isoelectric_point():  # prot analaysis
+def isoelectric_point():  # prot analysis
     """
     This function returns the charge at pH 7.
     """
@@ -189,7 +189,6 @@ def create_fasta_protein(e=None, f=None, g=None, h=None, i=None):
     This function creates a FASTA file of protein sequences with header info abut nucleotide sequence
     from which the protein was translated. (start, stop, frame, sense, length, GC content...)
     """
-    wrapper = textwrap.TextWrapper(width=80)
 
     if f is None:  # if no file name is provided, create a default name
         f = isoelectric_point()  # create a list of GC content for each ORF
@@ -212,7 +211,7 @@ def create_fasta_protein(e=None, f=None, g=None, h=None, i=None):
 
     wrapper = textwrap.TextWrapper(width=80)
 
-    with open("proteins.fasta", 'w') as fp:
+    with open("../output/proteins.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
             string = wrapper.fill(text=e_list_str[j])
             print("> PROTEIN NO." + str(prot_number_list[j]) + " |PROT SEQ INFO: IEP = " +
@@ -250,7 +249,7 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
 
     wrapper = textwrap.TextWrapper(width=80)
 
-    with open("mrna_sequences.fasta", 'w') as fp:
+    with open("../output/mrna_sequences.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
             string = wrapper.fill(text=e_list_str[j])
             print("> GENE NO." + str(gene_number_list[j]) + " |NUC SEQ INFO| GC content: " +
@@ -277,7 +276,7 @@ def plot_nucleotide_frequency_histogram():
     plt.ylabel("Frequency", fontsize=14)  # set the y-axis label
     plt.tight_layout()  # set the layout of the plot
     plt.savefig("nucleotide_frequency_histogram.jpg", dpi=250)  # save the plot as a .jpg file
-    plt.show()  # show the plot
+    # plt.show()  # show the plot
 
     return
 
@@ -298,7 +297,7 @@ def plot_nucleotide_frequency_pie():
     plt.pie(nuc_freq_list, labels=nuc_freq_keys, autopct='%1.1f%%')
     plt.title("Nucleotide Frequency", fontsize=14)
     plt.savefig("nucleotide_frequency_pie.jpg", dpi=250)
-    plt.show()
+    #  plt.show()
 
     return
 
@@ -352,12 +351,12 @@ def protein_frequency_histogram():
     freq = protein_frequency()
     plt.figure(figsize=(10, 6))
     plt.bar(freq.keys(), freq.values())
-    plt.title("Amino acid Frquency Distribution", fontsize=14)
+    plt.title("Amino acid Frequency Distribution", fontsize=14)
     plt.xlabel("Amino acid", fontsize=14)
     plt.ylabel("Frequency", fontsize=14)
     plt.tight_layout()
     plt.savefig("protein_frequency.jpg", dpi=250)
-    plt.show()
+    # plt.show()
 
     return
 
@@ -371,7 +370,7 @@ def protein_frequency_pie():
     plt.pie(freq.values(), labels=freq.keys(), autopct='%1.1f%%')
     plt.title("Amino acid Frequency", fontsize=14)
     plt.savefig("protein_frequency_pie.jpg", dpi=250)
-    plt.show()
+    # plt.show()
 
 
 protein_frequency_pie()
