@@ -4,21 +4,27 @@
 This program is used to analyze the genomic sequence of a bacterial genome.
 Bacteria is a prokaryotic organism and therefore it does not have introns.
 This program takes a FASTA file and returns various analysis of the sequence.
-
+Output: two fasta files, one with mRNA sequences and some stats about the nucleotide sequence. The other with the
+protein sequences and some stats abut the protein sequence.
+Stats:
+    nusleotide seq: GC content, ORFs, start-end, frame, sense, length, trailing
+    protein seq: isoelectric point, molecular weight, instability index, secondary structure
+    secondary structure: helix, strand, coil = number predicts probability of being a helix, strand, or coil
 """
+
 from Bio.SeqUtils.ProtParam import ProteinAnalysis as Pa
 from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqUtils import GC
 from Bio.Seq import transcribe
 from orffinder import orffinder
-import numpy as np
 from matplotlib import pyplot as plt
 from collections import Counter
 import textwrap
+import numpy as np
 
-# fasta_file = input("Enter the name of the FASTA file: ")  # input file using terminal
-fasta_file = "tuberculosis_genomic.fna"
+fasta_file = input("Enter your FASTA file: ")  # input file using terminal
+#  fasta_file = "tuberculosis_genomic.fna"
 
 
 def parse_fasta(input_file):
@@ -164,7 +170,21 @@ def instability_index():
     return instability_index_list
 
 
-def create_fasta_protein(e=None, f=None, g=None, h=None):
+def secondary_structure():
+    """
+    This function returns the prediction of secondary structure of the proteins.
+    :return:
+    """
+    secondary_structure_list = []
+    for protein in genes_to_protein():
+        protein_str = Pa(str(protein))
+        sec_struc = protein_str.secondary_structure_fraction()
+        secondary_structure_list.append(sec_struc)
+
+    return secondary_structure_list
+
+
+def create_fasta_protein(e=None, f=None, g=None, h=None, i=None):
     """
     This function creates a FASTA file of protein sequences with header info abut nucleotide sequence
     from which the protein was translated. (start, stop, frame, sense, length, GC content...)
@@ -179,11 +199,14 @@ def create_fasta_protein(e=None, f=None, g=None, h=None):
         g = molecular_weight()  # create a list of molecular weights for each protein
     if h is None:
         h = instability_index()
+    if i is None:
+        i = secondary_structure()
 
     e_list_str = list(map(str, e))  # convert list of Seq objects to list of strings
     f_list_str = list(map(str, f))  # convert list of float objects to list of strings
     g_list_str = list(map(str, g))  # convert list of float objects to list of strings
     h_list_str = list(map(str, h))  # convert list of float objects to list of strings
+    i_list_str = list(map(str, i))
 
     prot_number_list = np.arange(1, len(e_list_str) + 1)
 
@@ -194,11 +217,9 @@ def create_fasta_protein(e=None, f=None, g=None, h=None):
             string = wrapper.fill(text=e_list_str[j])
             print("> PROTEIN NO." + str(prot_number_list[j]) + " |PROT SEQ INFO: IEP = " +
                   f_list_str[j] + ", MW = " + g_list_str[j] + ", Instability idx = " + h_list_str[j] +
+                  ", 2nd. structure = " + i_list_str[j] +
                   "\n" + string + "\n", file=fp)
     return
-
-
-create_fasta_protein()  # later on in the program
 
 
 def transcription_orf():
@@ -210,9 +231,6 @@ def transcription_orf():
     for orf in orf_nucleotides():
         mrna.append(transcribe(str(orf)))
     return mrna
-
-
-# print(transcription_orf())
 
 
 def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
@@ -241,9 +259,6 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
     return
 
 
-create_fasta_nucleotide_mrna()
-
-
 def plot_nucleotide_frequency_histogram():
     """
     This function plots the nucleotide frequency of the genome.
@@ -261,13 +276,10 @@ def plot_nucleotide_frequency_histogram():
     plt.xlabel("Nucleotide", fontsize=14)  # set the x-axis label
     plt.ylabel("Frequency", fontsize=14)  # set the y-axis label
     plt.tight_layout()  # set the layout of the plot
-    plt.savefig("plot_nucleotide_frequency_histogram.jpg", dpi=250)  # save the plot as a .jpg file
+    plt.savefig("nucleotide_frequency_histogram.jpg", dpi=250)  # save the plot as a .jpg file
     plt.show()  # show the plot
 
     return
-
-
-plot_nucleotide_frequency_histogram()
 
 
 def plot_nucleotide_frequency_pie():
@@ -285,12 +297,10 @@ def plot_nucleotide_frequency_pie():
     plt.figure(figsize=(10, 6))
     plt.pie(nuc_freq_list, labels=nuc_freq_keys, autopct='%1.1f%%')
     plt.title("Nucleotide Frequency", fontsize=14)
-    plt.savefig("plot_nucleotide_frequency_pie.jpg", dpi=250)
+    plt.savefig("nucleotide_frequency_pie.jpg", dpi=250)
     plt.show()
+
     return
-
-
-plot_nucleotide_frequency_pie()
 
 
 def overall_sequence_info():
@@ -314,10 +324,8 @@ def overall_sequence_info():
     print(f"Nucleotide Percentage: {nuc_freq_percent_keys_str}")
     print(f"GC Content: {round((nuc_freq_list[1] + nuc_freq_list[3]) / nuc_freq_sum * 100, 2)}%")
     print(f"AT Content: {round((nuc_freq_list[2] + nuc_freq_list[0]) / nuc_freq_sum * 100, 2)}%")
+
     return
-
-
-print(overall_sequence_info())
 
 
 def dna_to_protein():
@@ -339,7 +347,7 @@ def protein_frequency():
 
 def protein_frequency_histogram():
     """
-    This function plots the protein frequency of the genome.
+    This function plots the amino acid frequency of the genome.
     """
     freq = protein_frequency()
     plt.figure(figsize=(10, 6))
@@ -351,13 +359,12 @@ def protein_frequency_histogram():
     plt.savefig("protein_frequency.jpg", dpi=250)
     plt.show()
 
-
-protein_frequency_histogram()
+    return
 
 
 def protein_frequency_pie():
     """
-    This function plots the protein frequency of the genome.
+    This function plots the  amino acid frequency of the genome.
     """
     freq = protein_frequency()
     plt.figure(figsize=(8, 6))
@@ -368,5 +375,11 @@ def protein_frequency_pie():
 
 
 protein_frequency_pie()
+protein_frequency_histogram()
+plot_nucleotide_frequency_pie()
+plot_nucleotide_frequency_histogram()
 
-# Todo:find more stats to add about hypothetic proteins I found, graphs, etc.
+print(overall_sequence_info())
+
+create_fasta_nucleotide_mrna()
+create_fasta_protein()
