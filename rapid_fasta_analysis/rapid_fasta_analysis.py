@@ -4,7 +4,9 @@
 Title: rapid_fasta_analysis
 Date: 2022-31-07
 Author: Jozef Fülöp
+Version: 1.0
 
+Description:
 This program is used to analyze the genomic sequence of a bacterial genome.
 Bacteria is a prokaryotic organism, and therefore it does not have introns.
 This program takes a FASTA file and returns various analysis of the sequence.
@@ -215,7 +217,7 @@ def create_fasta_protein(e=None, f=None, g=None, h=None, i=None):
 
     wrapper = textwrap.TextWrapper(width=80)
 
-    with open("../output/proteins.fasta", 'w') as fp:
+    with open("output/proteins.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
             string = wrapper.fill(text=e_list_str[j])
             print("> PROTEIN NO." + str(prot_number_list[j]) + " |PROT SEQ INFO: IEP = " +
@@ -253,7 +255,7 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
 
     wrapper = textwrap.TextWrapper(width=80)
 
-    with open("../output/mrna_sequences.fasta", 'w') as fp:
+    with open("output/mrna_sequences.fasta", 'w') as fp:
         for j in range(len(e_list_str)):
             string = wrapper.fill(text=e_list_str[j])
             print("> GENE NO." + str(gene_number_list[j]) + " |NUC SEQ INFO| GC content: " +
