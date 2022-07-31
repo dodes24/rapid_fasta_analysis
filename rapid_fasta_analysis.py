@@ -1,6 +1,8 @@
 #!/bin/python
 # -*- coding: utf-8 -*-
 """
+University of Chemical Technology Prague
+Chem-informatics and bioinformatics
 Title: rapid_fasta_analysis
 Date: 2022-31-07
 Author: Jozef Fülöp
@@ -377,6 +379,9 @@ def protein_frequency_pie():
     plt.title("Amino acid Frequency", fontsize=14)
     plt.savefig("protein_frequency_pie.jpg", dpi=250)
     # plt.show()
+
+
+#  output
 
 
 protein_frequency_pie()

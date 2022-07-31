@@ -9,7 +9,6 @@ Output: two fasta files, one with mRNA sequences and some stats about the nucleo
 protein sequences and some stats abut the protein sequence.
 
 ## Main features
-* This program can find hypothetical genes and proteins in a genome sequence. 
 * Process a fasta file. It can be a single sequence or a multiple sequence file. 
 * Obtain description and a sequence.
 * Return subsequence of a sequence: hypothetical genes and proteins.
