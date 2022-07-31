@@ -28,7 +28,7 @@ Stats:
 ## Usage
 * Install required packages using the command:
 * `pip install -r requirements.txt`
-* next
+* next, in directory input is located program rapid_fasta_analysis.py
 * `python rapid_fasta_analysis.py`
 * to start the program.
 * Enter the name/path of the file to be analyzed.: It is better to have fasta file and program in the same directory.
