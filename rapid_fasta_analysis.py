@@ -229,6 +229,9 @@ def create_fasta_protein(e=None, f=None, g=None, h=None, i=None):
     return
 
 
+create_fasta_protein()
+
+
 def transcription_orf():
     """
     This function transcribes the ORFs to mRNA.
@@ -266,6 +269,9 @@ def create_fasta_nucleotide_mrna(d=orf_finder(), e=None, f=None):
     return
 
 
+create_fasta_nucleotide_mrna()
+
+
 def plot_nucleotide_frequency_histogram():
     """
     This function plots the nucleotide frequency of the genome.
@@ -284,9 +290,12 @@ def plot_nucleotide_frequency_histogram():
     plt.ylabel("Frequency", fontsize=14)  # set the y-axis label
     plt.tight_layout()  # set the layout of the plot
     plt.savefig("nucleotide_frequency_histogram.jpg", dpi=250)  # save the plot as a .jpg file
-    # plt.show()  # show the plot
+    #  plt.show()  # show the plot
 
     return
+
+
+plot_nucleotide_frequency_histogram()
 
 
 def plot_nucleotide_frequency_pie():
@@ -308,6 +317,9 @@ def plot_nucleotide_frequency_pie():
     #  plt.show()
 
     return
+
+
+plot_nucleotide_frequency_pie()
 
 
 def overall_sequence_info():
@@ -333,6 +345,9 @@ def overall_sequence_info():
     print(f"AT Content: {round((nuc_freq_list[2] + nuc_freq_list[0]) / nuc_freq_sum * 100, 2)}%")
 
     return
+
+
+print(overall_sequence_info())
 
 
 def dna_to_protein():
@@ -369,6 +384,9 @@ def protein_frequency_histogram():
     return
 
 
+protein_frequency_histogram()
+
+
 def protein_frequency_pie():
     """
     This function plots the  amino acid frequency of the genome.
@@ -380,16 +398,20 @@ def protein_frequency_pie():
     plt.savefig("protein_frequency_pie.jpg", dpi=250)
     # plt.show()
 
-
-#  output
+    return
 
 
 protein_frequency_pie()
-protein_frequency_histogram()
-plot_nucleotide_frequency_pie()
-plot_nucleotide_frequency_histogram()
 
-print(overall_sequence_info())
 
-create_fasta_nucleotide_mrna()
-create_fasta_protein()
+#  output
+"""
+overall_sequence_info
+plot_nucleotide_frequency_histogram
+plot_nucleotide_frequency_pie
+protein_frequency_histogram
+protein_frequency_pie
+overall_sequence_info
+create_fasta_nucleotide_mrna
+create_fasta_protein
+"""
